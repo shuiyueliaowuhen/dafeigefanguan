@@ -1,8 +1,10 @@
-package com.sf.diancan;
+package com.sf.diancan.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.sf.diancan.R;
 
 public class MainActivity extends AppCompatActivity {
 

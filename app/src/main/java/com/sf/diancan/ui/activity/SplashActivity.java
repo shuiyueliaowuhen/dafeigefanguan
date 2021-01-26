@@ -1,4 +1,4 @@
-package com.sf.diancan;
+package com.sf.diancan.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+
+import com.sf.diancan.R;
 
 public class SplashActivity extends AppCompatActivity {
 
