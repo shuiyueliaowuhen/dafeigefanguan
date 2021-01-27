@@ -2,6 +2,7 @@ package com.sf.diancan.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,6 +17,8 @@ import com.sf.diancan.bean.User;
 import com.sf.diancan.biz.UserBiz;
 import com.sf.diancan.net.CommonCallback;
 import com.sf.diancan.utils.T;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.cookie.CookieJarImpl;
 
 public class LoginActivity extends BaseActivity {
 
@@ -23,6 +26,9 @@ public class LoginActivity extends BaseActivity {
     private EditText mEtPassword;
     private Button mBtnLogin;
     private TextView mBtnRegister;
+
+    private static final String KEY_USERNAME = "key_username";
+    private static final String KEY_PASSWORD = "key_password";
 
     UserBiz userBiz = new UserBiz();
 
@@ -40,6 +46,15 @@ public class LoginActivity extends BaseActivity {
 
         initEvent();
 
+        initIntent(getIntent());
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CookieJarImpl cookieJar = (CookieJarImpl) OkHttpUtils.getInstance().getOkHttpClient().cookieJar();
+        cookieJar.getCookieStore().removeAll();
     }
 
     private void initView() {
@@ -102,5 +117,32 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        initIntent(intent);
+    }
+
+    private void initIntent(Intent intent) {
+        if(null == intent){
+            return;
+        }
+        String userName = intent.getStringExtra(KEY_USERNAME);
+        String password = intent.getStringExtra(KEY_PASSWORD);
+        if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)){
+            return;
+        }
+        mEtUsername.setText(userName);
+        mEtPassword.setText(password);
+    }
+
+    public static void launch(Context context, String username, String password) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra(KEY_USERNAME, username);
+        intent.putExtra(KEY_PASSWORD, password);
+        context.startActivity(intent);
+    }
 
 }
